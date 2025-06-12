@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: My sample book
+title: "Interpretability Techniques for Speech Models: Tutorial Materials"
 author: ""
 logo: images/logo.png
 
