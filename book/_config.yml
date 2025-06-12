@@ -2,7 +2,8 @@
 # Learn more at https://jupyterbook.org/customize/config.html
 
 title: "Tutorial @ Interspeech 2025"
-author: ""
+author: "InterpretingDL"
+description: "Tutorial Materials on Interpretability Techniques for Speech Models"
 logo: images/logo.png
 
 # Force re-execution of notebooks on each build.
