@@ -32,8 +32,6 @@ html:
   use_issues_button: false
   use_repository_button: false
   use_page_navigation: false
-  analytics:
-    google_analytics_id: G-J3L8X6LZR0
   extra_footer: |
     <div>
     <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png"></a>
@@ -45,6 +43,8 @@ sphinx:
   config:
     html_show_copyright: false
     bibtex_reference_style: super
+    templates_path:
+      - _templates
 
 launch_buttons:
   colab_url: "https://colab.research.google.com"

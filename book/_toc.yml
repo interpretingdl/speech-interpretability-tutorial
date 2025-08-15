@@ -8,6 +8,8 @@ parts:
   - caption: Tutorial Materials
     chapters:
       - file: interspeech2025/intro
-        # sections:
-        #   - file: interspeech2025/feature-importance-scoring/intro
-        #   - file: interspeech2025/representational-analyses/intro
+        sections:
+          - file: interspeech2025/representational-analyses/probing.ipynb
+          - file: interspeech2025/representational-analyses/representation_space_comparisons.ipynb
+          - file: interspeech2025/feature-importance-scoring/context_mixing.ipynb
+          - file: interspeech2025/feature-importance-scoring/feature_attribution.ipynb

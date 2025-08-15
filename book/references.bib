@@ -34,7 +34,7 @@
 	title = {What do self-supervised speech models know about {Dutch}? {Analyzing} advantages of language-specific pre-training},
 	shorttitle = {What do self-supervised speech models know about {Dutch}?},
 	doi = {10.48550/arXiv.2506.00981},
-	author = {de Heer Kloots, Marianne and Mohebbi, Hosein and Pouw, Charlotte and Shen, Gaofei and Zuidema, Willem and Bentum, Martijn},
+	author = {{de Heer Kloots}, Marianne and Mohebbi, Hosein and Pouw, Charlotte and Shen, Gaofei and Zuidema, Willem and Bentum, Martijn},
 	year = {2025},
 	booktitle = {Interspeech 2025}
 }
@@ -112,7 +112,7 @@
 	shorttitle = {Human-like {Linguistic} {Biases} in {Neural} {Speech} {Models}},
 	doi = {10.21437/Interspeech.2024-2490},
 	booktitle = {Interspeech 2024},
-	author = {de Heer Kloots, Marianne and Zuidema, Willem},
+	author = {{de Heer Kloots}, Marianne and Zuidema, Willem},
 	year = {2024},
 	pages = {4593--4597},
 }
@@ -295,4 +295,62 @@
     url = "https://aclanthology.org/2024.eacl-long.136/",
     pages = "2221--2238",
     abstract = "Predictive models make mistakes and have biases. To combat both, we need to understand their predictions.Explainable AI (XAI) provides insights into models for vision, language, and tabular data. However, only a few approaches exist for speech classification models. Previous works focus on a selection of spoken language understanding (SLU) tasks, and most users find their explanations challenging to interpret.We propose a novel approach to explain speech classification models. It provides two types of insights. (i) Word-level. We measure the impact of each audio segment aligned with a word on the outcome. (ii) Paralinguistic. We evaluate how non-linguistic features (e.g., prosody and background noise) affect the outcome if perturbed.We validate our approach by explaining two state-of-the-art SLU models on two tasks in English and Italian. We test their plausibility with human subject ratings. Our results show that the explanations correctly represent the model{'}s inner workings and are plausible to humans."
+}
+
+@misc{yangUnderstandingSelfAttentionSelfSupervised2020a,
+  title = {Understanding {Self}-{Attention} of {Self}-{Supervised} {Audio} {Transformers}},
+  url = {http://arxiv.org/abs/2006.03265},
+  doi = {10.48550/arXiv.2006.03265},
+  abstract = {Self-supervised Audio Transformers (SAT) enable great success in many downstream speech applications like ASR, but how they work has not been widely explored yet. In this work, we present multiple strategies for the analysis of attention mechanisms in SAT. We categorize attentions into explainable categories, where we discover each category possesses its own unique functionality. We provide a visualization tool for understanding multi-head self-attention, importance ranking strategies for identifying critical attention, and attention refinement techniques to improve model performance.},
+  urldate = {2025-08-15},
+  publisher = {arXiv},
+  author = {Yang, Shu-wen and Liu, Andy T. and Lee, Hung-yi},
+  month = aug,
+  year = {2020},
+}
+
+
+@article{shimUNDERSTANDINGROLESELF2022,
+  title = {Understanding the Role of Self-Attention for Speech Understanding},
+  abstract = {Self-attention (SA) is a critical component of Transformer neural networks that have succeeded in automatic speech recognition (ASR). In this paper, we analyze the role of SA in Transformer-based ASR models for not only understanding the mechanism of improved recognition accuracy but also lowering the computational complexity. We reveal that SA performs two distinct roles: phonetic and linguistic localization. Especially, we show by experiments that phonetic localization in the lower layers extracts phonologically meaningful features from speech and reduces the phonetic variance in the utterance for proper linguistic localization in the upper layers. From this understanding, we discover that attention maps can be reused as long as their localization capability is preserved. To evaluate this idea, we implement the layer-wise attention map reuse on real GPU platforms and achieve up to 1.96 times speedup in inference and 33\% savings in training time with noticeably improved ASR performance for the challenging benchmark on LibriSpeech dev/test-other dataset.},
+  language = {en},
+  author = {Shim, Kyuhong and Choi, Jungwook and Sung, Wonyong},
+  year = {2022},
+}
+
+
+@inproceedings{alastrueyLocalityAttentionDirect2022,
+  address = {Dublin, Ireland},
+  title = {On the {Locality} of {Attention} in {Direct} {Speech} {Translation}},
+  url = {https://aclanthology.org/2022.acl-srw.32/},
+  doi = {10.18653/v1/2022.acl-srw.32},
+  booktitle = {Proceedings of the 60th {Annual} {Meeting} of the {Association} for {Computational} {Linguistics}: {Student} {Research} {Workshop}},
+  publisher = {Association for Computational Linguistics},
+  author = {Alastruey, Belen and Ferrando, Javier and Gállego, Gerard I. and Costa-jussà, Marta R.},
+  editor = {Louvan, Samuel and Madotto, Andrea and Madureira, Brielen},
+  year = {2022},
+  pages = {402--412}
+}
+
+
+@misc{audhkhasiAnalysisSelfAttentionHead2022,
+  title = {Analysis of {Self}-{Attention} {Head} {Diversity} for {Conformer}-based {Automatic} {Speech} {Recognition}},
+  url = {http://arxiv.org/abs/2209.06096},
+  doi = {10.48550/arXiv.2209.06096},
+  author = {Audhkhasi, Kartik and Huang, Yinghui and Ramabhadran, Bhuvana and Moreno, Pedro J.},
+  year = {2022},
+}
+
+
+@inproceedings{kobayashiAttentionNotOnly2020a,
+  address = {Online},
+  title = {Attention is {Not} {Only} a {Weight}: {Analyzing} {Transformers} with {Vector} {Norms}},
+  shorttitle = {Attention is {Not} {Only} a {Weight}},
+  url = {https://aclanthology.org/2020.emnlp-main.574/},
+  doi = {10.18653/v1/2020.emnlp-main.574},
+  publisher = {Association for Computational Linguistics},
+  author = {Kobayashi, Goro and Kuribayashi, Tatsuki and Yokoi, Sho and Inui, Kentaro},
+  editor = {Webber, Bonnie and Cohn, Trevor and He, Yulan and Liu, Yang},
+  year = {2020},
+  pages = {7057--7075}
 }
