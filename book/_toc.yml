@@ -5,7 +5,7 @@ format: jb-book
 root: index
 
 parts:
-  - caption: Tutorial Materials
+  - caption: Materials
     chapters:
       - file: interspeech2025/intro
         sections:
@@ -13,3 +13,4 @@ parts:
           - file: interspeech2025/representational-analyses/representation_space_comparisons.ipynb
           - file: interspeech2025/feature-importance-scoring/context_mixing.ipynb
           - file: interspeech2025/feature-importance-scoring/feature_attribution.ipynb
+      - file: reading-list

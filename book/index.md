@@ -34,13 +34,13 @@ We will present our tutorial about _Interpretability Techniques for Speech Model
 
 **Representational Analysis methods**: 
 - Probing{cite}`cormacenglishDomainInformedProbingWav2vec2022, choEvidenceVocalTract2023,bentumProcessingStressEndEnd2024,shen-etal-2024-encoding,bentum25_interspeech,deheerklootsWhatSelfsupervisedSpeech2025,cormacenglishDomainInformedProbingWav2vec2022`
-- Representation space comparisons: RSA{cite}`chrupala-etal-2020-analyzing,shenWaveSyntaxProbing2023a`, CCA{cite}`Pasad2021`, CKA{cite}`pmlr-v97-kornblith19a`)
+- Representation space comparisons: RSA{cite}`chrupala-etal-2020-analyzing,shenWaveSyntaxProbing2023a`, CCA{cite}`Pasad2021`, CKA{cite}`pmlr-v97-kornblith19a`
 - CTC & Decoder lenses{cite}`deheerklootsHumanlikeLinguisticBiases2024,langedijkDecoderLensLayerwiseInterpretation2024` 
 - Embedding similarities (ABX tests){cite}`schatz2016,algayresDPParseFindingWord2022,seysselDiscriminatingFormMeaning2025` 
 
 **Feature Importance Scoring methods**: 
 - Context-mixing: Attention{cite}`yangUnderstandingSelfAttentionSelfSupervised2020a,shimUNDERSTANDINGROLESELF2022,alastrueyLocalityAttentionDirect2022,audhkhasiAnalysisSelfAttentionHead2022`, Attention Norm{cite}`kobayashiAttentionNotOnly2020a`, Value-Zeroing {cite}`mohebbiHomophoneDisambiguationReveals2023a`
-- Feature attribution {cite}`fucciExplainabilitySpeechModels2024,shenReliabilityFeatureAttribution2025`: Gradient-based{cite}`prasadHowAccentsConfound2020,guptaPhonemeDiscretizedSaliency2024` & Perturbation-based{cite}`wuExplanationsforASR2023,pastor-etal-2024-explaining`
+- Feature attribution{cite}`fucciExplainabilitySpeechModels2024,shenReliabilityFeatureAttribution2025`: Gradient-based{cite}`prasadHowAccentsConfound2020,guptaPhonemeDiscretizedSaliency2024` & Perturbation-based{cite}`wuExplanationsforASR2023,pastor-etal-2024-explaining`
 
 ## References
 
