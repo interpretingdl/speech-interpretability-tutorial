@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Explaining Speech Classification Models with Feature Attribution: &#8212; Tutorial @ Interspeech 2025</title>
+    <title>Explaining Speech Classification Models with Feature Attribution &#8212; Tutorial @ Interspeech 2025</title>
   
   
   
@@ -173,14 +173,14 @@
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="../../index.html">
-                    Programme at Interspeech 2025
+                    Interpretability Techniques for Speech Models
                 </a>
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorial Materials</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../intro.html">Interspeech 2025</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../representational-analyses/probing.html"><strong>Probing exercise: Does Wav2Vec2 encode vocal tract movements?</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../representational-analyses/probing.html">Probing exercise: Does Wav2Vec2 encode vocal tract movements?</a></li>
 
 
 
@@ -190,15 +190,15 @@
 
 
 
-<li class="toctree-l2"><a class="reference internal" href="../representational-analyses/representation_space_comparisons.html">Locating acoustic and articulatory information in Wav2Vec2 with CKA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="context_mixing.html"><strong>Quantifying Context-Mixing in Speech Transformers</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../representational-analyses/representation_space_comparisons.html">Representation space comparisons: Locating acoustic and articulatory information in Wav2Vec2 with CKA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context_mixing.html">Quantifying Context-Mixing in Speech Transformers</a></li>
 
 
 
 
 
 
-<li class="toctree-l2 current active"><a class="current reference internal" href="#"><strong>Explaining Speech Classification Models with Feature Attribution:</strong></a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Explaining Speech Classification Models with Feature Attribution</a></li>
 
 
 
@@ -375,7 +375,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Explaining Speech Classification Models with Feature Attribution:</h1>
+    <h1>Explaining Speech Classification Models with Feature Attribution</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -385,10 +385,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Explaining Speech Classification Models with Feature Attribution:</strong></a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#author-gaofei-shen">Author: Gaofei Shen</a></li>
-</ul>
-</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Explaining Speech Classification Models with Feature Attribution</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-example-dataset">The example dataset</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-example-model">The example model</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-make-sure-the-model-works">Let’s make sure the model works!</a></li>
@@ -407,11 +404,11 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="explaining-speech-classification-models-with-feature-attribution">
-<h1><strong>Explaining Speech Classification Models with Feature Attribution:</strong><a class="headerlink" href="#explaining-speech-classification-models-with-feature-attribution" title="Link to this heading">#</a></h1>
+<h1>Explaining Speech Classification Models with Feature Attribution<a class="headerlink" href="#explaining-speech-classification-models-with-feature-attribution" title="Link to this heading">#</a></h1>
 <hr class="docutils" />
-<section id="author-gaofei-shen">
-<h2>Author: Gaofei Shen<a class="headerlink" href="#author-gaofei-shen" title="Link to this heading">#</a></h2>
-<p>This notebook is part of the <em>Interspeech</em> 2025 tutorial on <em>“Interpretability Techniques for Speech Models.”</em> The notebook explores the ways to use <em>feature attribution</em> methods in the context of speech models.</p>
+<p>Author: Gaofei Shen</p>
+<hr class="docutils" />
+<p>This notebook is part of the <a class="reference external" href="https://www.interspeech2025.org/home">Interspeech 2025</a> tutorial on <a class="reference external" href="https://interpretingdl.github.io/speech-interpretability-tutorial/"><em>Interpretability Techniques for Speech Models</em></a>. The notebook explores the ways to use <em>feature attribution</em> methods in the context of speech models.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#@title Installing up python packages</span>
@@ -435,11 +432,6 @@ document.write(`
   <span class="c1"># Kill the colab kernel process to force restart</span>
   <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">(),</span> <span class="mi">9</span><span class="p">)</span>
 <span class="c1">########## End checking numpy version #######</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Current Numpy version is: 1.26.4
 </pre></div>
 </div>
 </div>
@@ -495,7 +487,6 @@ document.write(`
 </div>
 </div>
 </div>
-</section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="the-example-dataset">
 <h1>The example dataset<a class="headerlink" href="#the-example-dataset" title="Link to this heading">#</a></h1>
@@ -976,7 +967,7 @@ The following code cell includes helper function to run the feature attribution 
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><strong>Quantifying Context-Mixing in Speech Transformers</strong></p>
+        <p class="prev-next-title">Quantifying Context-Mixing in Speech Transformers</p>
       </div>
     </a>
 </div>
@@ -995,10 +986,7 @@ The following code cell includes helper function to run the feature attribution 
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Explaining Speech Classification Models with Feature Attribution:</strong></a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#author-gaofei-shen">Author: Gaofei Shen</a></li>
-</ul>
-</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Explaining Speech Classification Models with Feature Attribution</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-example-dataset">The example dataset</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-example-model">The example model</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-make-sure-the-model-works">Let’s make sure the model works!</a></li>

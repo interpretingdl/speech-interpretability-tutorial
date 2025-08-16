@@ -64,8 +64,8 @@
     <link rel="icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Explaining Speech Classification Models with Feature Attribution:" href="feature_attribution.html" />
-    <link rel="prev" title="Locating acoustic and articulatory information in Wav2Vec2 with CKA" href="../representational-analyses/representation_space_comparisons.html" />
+    <link rel="next" title="Explaining Speech Classification Models with Feature Attribution" href="feature_attribution.html" />
+    <link rel="prev" title="Representation space comparisons: Locating acoustic and articulatory information in Wav2Vec2 with CKA" href="../representational-analyses/representation_space_comparisons.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -176,14 +176,14 @@
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="../../index.html">
-                    Programme at Interspeech 2025
+                    Interpretability Techniques for Speech Models
                 </a>
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorial Materials</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../intro.html">Interspeech 2025</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../representational-analyses/probing.html"><strong>Probing exercise: Does Wav2Vec2 encode vocal tract movements?</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../representational-analyses/probing.html">Probing exercise: Does Wav2Vec2 encode vocal tract movements?</a></li>
 
 
 
@@ -193,15 +193,15 @@
 
 
 
-<li class="toctree-l2"><a class="reference internal" href="../representational-analyses/representation_space_comparisons.html">Locating acoustic and articulatory information in Wav2Vec2 with CKA</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#"><strong>Quantifying Context-Mixing in Speech Transformers</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../representational-analyses/representation_space_comparisons.html">Representation space comparisons: Locating acoustic and articulatory information in Wav2Vec2 with CKA</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Quantifying Context-Mixing in Speech Transformers</a></li>
 
 
 
 
 
 
-<li class="toctree-l2"><a class="reference internal" href="feature_attribution.html"><strong>Explaining Speech Classification Models with Feature Attribution:</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="feature_attribution.html">Explaining Speech Classification Models with Feature Attribution</a></li>
 
 
 
@@ -388,10 +388,10 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Quantifying Context-Mixing in Speech Transformers</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Quantifying Context-Mixing in Speech Transformers</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#required-libraries"><strong>Required Libraries</strong></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset"><strong>Dataset</strong></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#models"><strong>Models</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#homophone-dataset"><strong>Homophone Dataset</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#asr-models"><strong>ASR Models</strong></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing"><strong>Preprocessing</strong></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-context-mixing-scores"><strong>Computing context-mixing scores</strong></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-method-1-attention"><strong>Analysis Method #1: Attention</strong></a></li>
@@ -412,13 +412,14 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="quantifying-context-mixing-in-speech-transformers">
-<h1><strong>Quantifying Context-Mixing in Speech Transformers</strong><a class="headerlink" href="#quantifying-context-mixing-in-speech-transformers" title="Link to this heading">#</a></h1>
+<h1>Quantifying Context-Mixing in Speech Transformers<a class="headerlink" href="#quantifying-context-mixing-in-speech-transformers" title="Link to this heading">#</a></h1>
 <hr class="docutils" />
 <p>Author: Hosein Mohebbi</p>
+<p><em>Thanks to Martijn Bentum, Tom Lentz, and Willem Zuidema for their helpful feedback during the notebook’s preparation.</em></p>
 <hr class="docutils" />
-<p>This notebook is based on EMNLP 2023 paper: <a class="reference external" href="https://aclanthology.org/2023.emnlp-main.513.pdf">“Homophone Disambiguation Reveals Patterns of Context Mixing in Speech Transformers”</a> and part of the <a class="reference external" href="https://www.interspeech2025.org/home"><em>Interspeech2025</em></a> tutorial on <a class="reference external" href="https://interpretingdl.github.io/speech-interpretability-tutorial/"><em>“Interpretability Techniques for Speech Models.”</em></a> The notebook explores the ways to quantify patterns of <em>context-mixing</em> in speech ASR models at word-level.</p>
+<p>This notebook is based on the EMNLP 2023 paper: <a class="reference external" href="https://aclanthology.org/2023.emnlp-main.513.pdf">“Homophone Disambiguation Reveals Patterns of Context Mixing in Speech Transformers”</a> and part of the <a class="reference external" href="https://www.interspeech2025.org/home">Interspeech 2025</a> tutorial on <a class="reference external" href="https://interpretingdl.github.io/speech-interpretability-tutorial/"><em>Interpretability Techniques for Speech Models</em></a>.</p>
+<p>The notebook explores the ways to quantify patterns of <em>context-mixing</em> in speech ASR models at word-level.</p>
 </section>
-<hr class="docutils" />
 <section class="tex2jax_ignore mathjax_ignore" id="required-libraries">
 <h1><strong>Required Libraries</strong><a class="headerlink" href="#required-libraries" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
@@ -454,8 +455,8 @@ document.write(`
 </div>
 </div>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="dataset">
-<h1><strong>Dataset</strong><a class="headerlink" href="#dataset" title="Link to this heading">#</a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="homophone-dataset">
+<h1><strong>Homophone Dataset</strong><a class="headerlink" href="#homophone-dataset" title="Link to this heading">#</a></h1>
 <p>As a case study for analyzing word-level context mixing in speech representations, we use a dataset containing examples of homophones in French spoken language. In order to correctly transcribe these utterances, an ASR model has to rely on syntactic cues from the surrounding context to distinguish between words with identical pronunciations. This makes the task ideal for studying context mixing, as it provides a clear hypothesis about which parts of the context are most relevant for transcribing ambiguous target words.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -495,8 +496,8 @@ Second Target Word (if there is any):  None
 </div>
 </div>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="models">
-<h1><strong>Models</strong><a class="headerlink" href="#models" title="Link to this heading">#</a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="asr-models">
+<h1><strong>ASR Models</strong><a class="headerlink" href="#asr-models" title="Link to this heading">#</a></h1>
 <p>We provide two sets of ASR models that support French language:</p>
 <ul class="simple">
 <li><p>Whisper OpenAI (Radford et al., 2022) is a multilingual encoder-decoder multitask speech
@@ -632,7 +633,7 @@ Due to a bug fix in https://github.com/huggingface/transformers/pull/28687 trans
 <p>In this notebook, we consider two analysis methods for quantifying context-mixing in speech Transformers at word-level:</p>
 <ul class="simple">
 <li><p><strong>Attention</strong></p></li>
-<li><p><strong>Value Zeroing</strong></p></li>
+<li><p><strong>Value Zeroing</strong> <a class="reference external" href="https://aclanthology.org/2023.eacl-main.245.pdf">(Mohebbi et al., 2023)</a></p></li>
 </ul>
 <section id="analysis-method-1-attention">
 <h2><strong>Analysis Method #1: Attention</strong><a class="headerlink" href="#analysis-method-1-attention" title="Link to this heading">#</a></h2>
@@ -694,7 +695,7 @@ S_{i \leftarrow j}=\frac{1}{|\mathcal{I}||\mathcal{J}| H} \sum_{n \in \mathcal{I
 $<span class="math notranslate nohighlight">\(
 S_{i \leftarrow j}=\frac{1}{|\mathcal{I}|} \sum_{n \in \mathcal{I}} \cos \left(\tilde{\boldsymbol{x}}_{n}, \tilde{\boldsymbol{x}}_{n}^{\neg j}\right)
 \)</span>$</p>
-<p><strong>Note #1</strong>: Unlike generic perturbation approaches, our proposed method does not remove the input token representations <span class="math notranslate nohighlight">\(x_i\)</span> from the input of a transformer layer! Since any changes in the input vectors will lead to changes in the query and key vectors in the multi-head attention module, resulting in a change in the attention distribution. So, there will be a discrepancy between the alternative attention weights that we analyze and those we initially had for the original context. So, basically, we won’t analyze the same model anymore! By zeroing only the value vector in the weighted sum, the token representation maintains its identity within the layer, but it does not contribute to forming other token representations.</p>
+<p><strong>Note #1</strong>: Unlike generic perturbation approaches, our proposed method does not remove the input token representations <span class="math notranslate nohighlight">\(x_i\)</span> from the input of a transformer layer! Since any changes in the input vectors will lead to changes in the query and key vectors in the multi-head attention module, resulting in a change in the attention distribution. So, there will be a discrepancy between the alternative attention weights that we analyze and those we initially had for the original context; So, basically, we won’t analyze the same model anymore! By zeroing only the value vector in the weighted sum, the token representation maintains its identity within the layer, not leading to OOD problem, while not contributing to conttext-mixing to from other token representations.</p>
 <p><strong>Note #2</strong>: Since Value Zeroing is computed from the layer’s outputs, it incorporates all the components inside a Transformer layer, inlcuding feed-forwards, layer normalization, and residual connection.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -998,7 +999,7 @@ S_{i \leftarrow j}=\frac{1}{|\mathcal{I}|} \sum_{n \in \mathcal{I}} \cos \left(\
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Locating acoustic and articulatory information in Wav2Vec2 with CKA</p>
+        <p class="prev-next-title">Representation space comparisons: Locating acoustic and articulatory information in Wav2Vec2 with CKA</p>
       </div>
     </a>
     <a class="right-next"
@@ -1006,7 +1007,7 @@ S_{i \leftarrow j}=\frac{1}{|\mathcal{I}|} \sum_{n \in \mathcal{I}} \cos \left(\
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><strong>Explaining Speech Classification Models with Feature Attribution:</strong></p>
+        <p class="prev-next-title">Explaining Speech Classification Models with Feature Attribution</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1026,10 +1027,10 @@ S_{i \leftarrow j}=\frac{1}{|\mathcal{I}|} \sum_{n \in \mathcal{I}} \cos \left(\
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Quantifying Context-Mixing in Speech Transformers</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Quantifying Context-Mixing in Speech Transformers</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#required-libraries"><strong>Required Libraries</strong></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset"><strong>Dataset</strong></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#models"><strong>Models</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#homophone-dataset"><strong>Homophone Dataset</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#asr-models"><strong>ASR Models</strong></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing"><strong>Preprocessing</strong></a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-context-mixing-scores"><strong>Computing context-mixing scores</strong></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-method-1-attention"><strong>Analysis Method #1: Attention</strong></a></li>
