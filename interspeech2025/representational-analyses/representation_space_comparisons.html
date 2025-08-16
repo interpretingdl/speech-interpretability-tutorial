@@ -1,0 +1,931 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Locating acoustic and articulatory information in Wav2Vec2 with CKA &#8212; Tutorial @ Interspeech 2025</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=3821e700" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'interspeech2025/representational-analyses/representation_space_comparisons';</script>
+    <link rel="icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Quantifying Context-Mixing in Speech Transformers" href="../feature-importance-scoring/context_mixing.html" />
+    <link rel="prev" title="Probing exercise: Does Wav2Vec2 encode vocal tract movements?" href="probing.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="Tutorial @ Interspeech 2025 - Home"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="Tutorial @ Interspeech 2025 - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Programme at Interspeech 2025
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorial Materials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../intro.html">Interspeech 2025</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="probing.html"><strong>Probing exercise: Does Wav2Vec2 encode vocal tract movements?</strong></a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Locating acoustic and articulatory information in Wav2Vec2 with CKA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../feature-importance-scoring/context_mixing.html"><strong>Quantifying Context-Mixing in Speech Transformers</strong></a></li>
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../feature-importance-scoring/feature_attribution.html"><strong>Explaining Speech Classification Models with Feature Attribution:</strong></a></li>
+
+
+
+
+
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/interpretingdl/speech-interpretability-tutorial/blob/main/book/interspeech2025/representational-analyses/representation_space_comparisons.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/interspeech2025/representational-analyses/representation_space_comparisons.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Locating acoustic and articulatory information in Wav2Vec2 with CKA</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cka-similarity-to-acoustic-and-articulatory-features">CKA similarity to acoustic and articulatory features</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-gram-matrices-between-model-layers">Comparing Gram matrices between model layers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cka-similarities-between-model-layers">CKA similarities between model layers</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="locating-acoustic-and-articulatory-information-in-wav2vec2-with-cka">
+<h1>Locating acoustic and articulatory information in Wav2Vec2 with CKA<a class="headerlink" href="#locating-acoustic-and-articulatory-information-in-wav2vec2-with-cka" title="Link to this heading">#</a></h1>
+<hr class="docutils" />
+<p>Author: Marianne de Heer Kloots</p>
+<hr class="docutils" />
+<p>Representational space comparison methods such as Centered Kernel Alignment allow us to compare representational spaces with very different formats, such model embeddings and syntactic trees (as in <a class="reference external" href="https://www.isca-archive.org/interspeech_2023/shen23_interspeech.html">Shen et al., 2023</a>), or model embeddings and human brain recordings (as in <a class="reference external" href="https://2025.ccneuro.org/abstract_pdf/Kloots_2025_The_role_context_neural_representational_alignment.pdf">de Heer Kloots et al., 2025</a>), <!-- (as in [Abnar et al., 2019]()) --> as long as we are able to define a similarity measure over a common set of stimuli within each representational space.</p>
+<p>In this notebook, we’ll perform a representational similarity analysis technique called Centered Kernel Alignment (<a class="reference external" href="https://proceedings.mlr.press/v97/kornblith19a/kornblith19a.pdf">Kornblith et al., 2019</a>), to compare Wav2Vec2’s internal layer activations to articulatory EMA features and acoustic MFCC features.
+For each type of feature (i.e. each <em>representation space</em>), we extract <em>Gram matrices</em>, capturing the pairwise similarities across all stimuli within that representation space. CKA in effect then scores the alignment between Gram matrices of different representation spaces, e.g. between Wav2Vec2 activations and EMA or MFCC features.</p>
+<p>We’ll also explore the use of CKA to compare layerwise activations within a model, characterizing its different processing stages.</p>
+<p>This notebook makes use of the <a class="reference external" href="https://colab.research.google.com/github/google-research/google-research/blob/master/representation_similarity/Demo.ipynb">reference code</a> provided by Simon Kornblith and colleagues for implementing CKA computations, which is loaded in the cell below.</p>
+<p>TODO add picture visualizing articulatory feature vectors and MFCCs</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title CKA functions</span>
+<span class="c1">## taken from Kornblith et al. (2019) - https://cka-similarity.github.io/</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">gram_linear</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Compute Gram (kernel) matrix for a linear kernel.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    x: A num_examples x num_features matrix of features.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    A num_examples x num_examples Gram matrix of examples.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">gram_rbf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Compute Gram (kernel) matrix for an RBF kernel.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    x: A num_examples x num_features matrix of features.</span>
+<span class="sd">    threshold: Fraction of median Euclidean distance to use as RBF kernel</span>
+<span class="sd">      bandwidth. (This is the heuristic we use in the paper. There are other</span>
+<span class="sd">      possible ways to set the bandwidth; we didn&#39;t try them.)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    A num_examples x num_examples Gram matrix of examples.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">dot_products</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+  <span class="n">sq_norms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">dot_products</span><span class="p">)</span>
+  <span class="n">sq_distances</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dot_products</span> <span class="o">+</span> <span class="n">sq_norms</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">sq_norms</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+  <span class="n">sq_median_distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">sq_distances</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">sq_distances</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">threshold</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sq_median_distance</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">center_gram</span><span class="p">(</span><span class="n">gram</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Center a symmetric Gram matrix.</span>
+
+<span class="sd">  This is equvialent to centering the (possibly infinite-dimensional) features</span>
+<span class="sd">  induced by the kernel before computing the Gram matrix.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    gram: A num_examples x num_examples symmetric matrix.</span>
+<span class="sd">    unbiased: Whether to adjust the Gram matrix in order to compute an unbiased</span>
+<span class="sd">      estimate of HSIC. Note that this estimator may be negative.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    A symmetric matrix with centered columns and rows.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">gram</span><span class="p">,</span> <span class="n">gram</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Input must be a symmetric matrix.&#39;</span><span class="p">)</span>
+  <span class="n">gram</span> <span class="o">=</span> <span class="n">gram</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+  <span class="k">if</span> <span class="n">unbiased</span><span class="p">:</span>
+    <span class="c1"># This formulation of the U-statistic, from Szekely, G. J., &amp; Rizzo, M.</span>
+    <span class="c1"># L. (2014). Partial distance correlation with methods for dissimilarities.</span>
+    <span class="c1"># The Annals of Statistics, 42(6), 2382-2412, seems to be more numerically</span>
+    <span class="c1"># stable than the alternative from Song et al. (2007).</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">gram</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">gram</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">gram</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">means</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">means</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">gram</span> <span class="o">-=</span> <span class="n">means</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">gram</span> <span class="o">-=</span> <span class="n">means</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">gram</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">gram</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">means</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">means</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">gram</span> <span class="o">-=</span> <span class="n">means</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">gram</span> <span class="o">-=</span> <span class="n">means</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+
+  <span class="k">return</span> <span class="n">gram</span>
+
+
+<span class="k">def</span> <span class="nf">cka</span><span class="p">(</span><span class="n">gram_x</span><span class="p">,</span> <span class="n">gram_y</span><span class="p">,</span> <span class="n">debiased</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Compute CKA.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    gram_x: A num_examples x num_examples Gram matrix.</span>
+<span class="sd">    gram_y: A num_examples x num_examples Gram matrix.</span>
+<span class="sd">    debiased: Use unbiased estimator of HSIC. CKA may still be biased.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    The value of CKA between X and Y.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">gram_x</span> <span class="o">=</span> <span class="n">center_gram</span><span class="p">(</span><span class="n">gram_x</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="n">debiased</span><span class="p">)</span>
+  <span class="n">gram_y</span> <span class="o">=</span> <span class="n">center_gram</span><span class="p">(</span><span class="n">gram_y</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="n">debiased</span><span class="p">)</span>
+
+  <span class="c1"># Note: To obtain HSIC, this should be divided by (n-1)**2 (biased variant) or</span>
+  <span class="c1"># n*(n-3) (unbiased variant), but this cancels for CKA.</span>
+  <span class="n">scaled_hsic</span> <span class="o">=</span> <span class="n">gram_x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">gram_y</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+
+  <span class="n">normalization_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">gram_x</span><span class="p">)</span>
+  <span class="n">normalization_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">gram_y</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">scaled_hsic</span> <span class="o">/</span> <span class="p">(</span><span class="n">normalization_x</span> <span class="o">*</span> <span class="n">normalization_y</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_debiased_dot_product_similarity_helper</span><span class="p">(</span>
+    <span class="n">xty</span><span class="p">,</span> <span class="n">sum_squared_rows_x</span><span class="p">,</span> <span class="n">sum_squared_rows_y</span><span class="p">,</span> <span class="n">squared_norm_x</span><span class="p">,</span> <span class="n">squared_norm_y</span><span class="p">,</span>
+    <span class="n">n</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Helper for computing debiased dot product similarity (i.e. linear HSIC).&quot;&quot;&quot;</span>
+  <span class="c1"># This formula can be derived by manipulating the unbiased estimator from</span>
+  <span class="c1"># Song et al. (2007).</span>
+  <span class="k">return</span> <span class="p">(</span>
+      <span class="n">xty</span> <span class="o">-</span> <span class="n">n</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="n">sum_squared_rows_x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">sum_squared_rows_y</span><span class="p">)</span>
+      <span class="o">+</span> <span class="n">squared_norm_x</span> <span class="o">*</span> <span class="n">squared_norm_y</span> <span class="o">/</span> <span class="p">((</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)))</span>
+
+
+<span class="k">def</span> <span class="nf">feature_space_linear_cka</span><span class="p">(</span><span class="n">features_x</span><span class="p">,</span> <span class="n">features_y</span><span class="p">,</span> <span class="n">debiased</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Compute CKA with a linear kernel, in feature space.</span>
+
+<span class="sd">  This is typically faster than computing the Gram matrix when there are fewer</span>
+<span class="sd">  features than examples.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    features_x: A num_examples x num_features matrix of features.</span>
+<span class="sd">    features_y: A num_examples x num_features matrix of features.</span>
+<span class="sd">    debiased: Use unbiased estimator of dot product similarity. CKA may still be</span>
+<span class="sd">      biased. Note that this estimator may be negative.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    The value of CKA between X and Y.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">features_x</span> <span class="o">=</span> <span class="n">features_x</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">features_x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">features_y</span> <span class="o">=</span> <span class="n">features_y</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">features_y</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+  <span class="n">dot_product_similarity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">features_x</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">features_y</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+  <span class="n">normalization_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">features_x</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">features_x</span><span class="p">))</span>
+  <span class="n">normalization_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">features_y</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">features_y</span><span class="p">))</span>
+
+  <span class="k">if</span> <span class="n">debiased</span><span class="p">:</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">features_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Equivalent to np.sum(features_x ** 2, 1) but avoids an intermediate array.</span>
+    <span class="n">sum_squared_rows_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ij,ij-&gt;i&#39;</span><span class="p">,</span> <span class="n">features_x</span><span class="p">,</span> <span class="n">features_x</span><span class="p">)</span>
+    <span class="n">sum_squared_rows_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ij,ij-&gt;i&#39;</span><span class="p">,</span> <span class="n">features_y</span><span class="p">,</span> <span class="n">features_y</span><span class="p">)</span>
+    <span class="n">squared_norm_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sum_squared_rows_x</span><span class="p">)</span>
+    <span class="n">squared_norm_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sum_squared_rows_y</span><span class="p">)</span>
+
+    <span class="n">dot_product_similarity</span> <span class="o">=</span> <span class="n">_debiased_dot_product_similarity_helper</span><span class="p">(</span>
+        <span class="n">dot_product_similarity</span><span class="p">,</span> <span class="n">sum_squared_rows_x</span><span class="p">,</span> <span class="n">sum_squared_rows_y</span><span class="p">,</span>
+        <span class="n">squared_norm_x</span><span class="p">,</span> <span class="n">squared_norm_y</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">normalization_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">_debiased_dot_product_similarity_helper</span><span class="p">(</span>
+        <span class="n">normalization_x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sum_squared_rows_x</span><span class="p">,</span> <span class="n">sum_squared_rows_x</span><span class="p">,</span>
+        <span class="n">squared_norm_x</span><span class="p">,</span> <span class="n">squared_norm_x</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+    <span class="n">normalization_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">_debiased_dot_product_similarity_helper</span><span class="p">(</span>
+        <span class="n">normalization_y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sum_squared_rows_y</span><span class="p">,</span> <span class="n">sum_squared_rows_y</span><span class="p">,</span>
+        <span class="n">squared_norm_y</span><span class="p">,</span> <span class="n">squared_norm_y</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+
+  <span class="k">return</span> <span class="n">dot_product_similarity</span> <span class="o">/</span> <span class="p">(</span><span class="n">normalization_x</span> <span class="o">*</span> <span class="n">normalization_y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The cell below loads libraries and data used in this notebook. First make sure to connect to the tutorial folder in your google drive.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/drive&#39;</span><span class="p">)</span>
+
+<span class="n">TUTORIAL_PATH</span> <span class="o">=</span> <span class="s1">&#39;/content/drive/MyDrive/InterspeechTutorial&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mounted at /content/drive
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">librosa</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">zscore</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s1">&#39;whitegrid&#39;</span><span class="p">)</span>
+
+<span class="c1"># audio sampling frequency</span>
+<span class="n">SAMP_FREQ</span> <span class="o">=</span> <span class="mi">16000</span>
+
+<span class="c1"># filenames for for two participants speaking a set of 10 identical sentences</span>
+<span class="n">p1_filenames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;F02_B01_S18_R01_N.mat&#39;</span><span class="p">,</span> <span class="s1">&#39;F02_B01_S33_R01_N.mat&#39;</span><span class="p">,</span> <span class="s1">&#39;F02_B01_S04_R01_N.mat&#39;</span><span class="p">,</span> <span class="s1">&#39;F02_B01_S52_R01_N.mat&#39;</span><span class="p">,</span> <span class="s1">&#39;F02_B01_S42_R01_N.mat&#39;</span><span class="p">]</span>
+<span class="n">p2_filenames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;M02_B01_S18_R01_N.mat&#39;</span><span class="p">,</span> <span class="s1">&#39;M02_B01_S33_R01_N.mat&#39;</span><span class="p">,</span> <span class="s1">&#39;M02_B01_S04_R01_N.mat&#39;</span><span class="p">,</span> <span class="s1">&#39;M02_B01_S52_R01_N.mat&#39;</span><span class="p">,</span> <span class="s1">&#39;M02_B01_S42_R01_N.mat&#39;</span><span class="p">]</span>
+
+<span class="c1"># wav2vec2 features extracted for the 10 sentence recordings by participant 1 and 2</span>
+<span class="n">frame_states_p1_test</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">TUTORIAL_PATH</span><span class="si">}</span><span class="s1">/ema_probing_data/frame_states_p1_test.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+<span class="n">frame_states_p2_test</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">TUTORIAL_PATH</span><span class="si">}</span><span class="s1">/ema_probing_data/frame_states_p2_test.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+
+<span class="c1"># audio and electromagnetic articulography (EMA) data for sentences read by participant 1</span>
+<span class="n">audio_df_p1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">TUTORIAL_PATH</span><span class="si">}</span><span class="s1">/ema_probing_data/ema_audio_F02.pkl&#39;</span><span class="p">)</span>
+<span class="n">audio_df_p1</span> <span class="o">=</span> <span class="n">audio_df_p1</span><span class="p">[</span><span class="n">audio_df_p1</span><span class="p">[</span><span class="s1">&#39;FILENAME&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;B01&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">ema_features_p1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">TUTORIAL_PATH</span><span class="si">}</span><span class="s1">/ema_probing_data/ema_labels_F02.csv&#39;</span><span class="p">)</span>
+<span class="n">ema_features_p1</span> <span class="o">=</span> <span class="n">ema_features_p1</span><span class="p">[</span><span class="n">ema_features_p1</span><span class="p">[</span><span class="s1">&#39;FILENAME&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;B01&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+<span class="c1"># names of the X and Y coordinates recorded by EMA</span>
+<span class="n">ema_X_feats</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;TR_X&#39;</span><span class="p">,</span> <span class="s1">&#39;TB_X&#39;</span><span class="p">,</span> <span class="s1">&#39;TT_X&#39;</span><span class="p">,</span> <span class="s1">&#39;UL_X&#39;</span><span class="p">,</span> <span class="s1">&#39;LL_X&#39;</span><span class="p">,</span> <span class="s1">&#39;JAW_X&#39;</span><span class="p">]</span>
+<span class="n">ema_Y_feats</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;TR_Y&#39;</span><span class="p">,</span> <span class="s1">&#39;TB_Y&#39;</span><span class="p">,</span> <span class="s1">&#39;TT_Y&#39;</span><span class="p">,</span> <span class="s1">&#39;UL_Y&#39;</span><span class="p">,</span> <span class="s1">&#39;LL_Y&#39;</span><span class="p">,</span> <span class="s1">&#39;JAW_Y&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="cka-similarity-to-acoustic-and-articulatory-features">
+<h2>CKA similarity to acoustic and articulatory features<a class="headerlink" href="#cka-similarity-to-acoustic-and-articulatory-features" title="Link to this heading">#</a></h2>
+<p>Is acoustic information equally prominent across all layers of Wav2Vec2? What about articulatory information?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mfcc_cka</span><span class="p">(</span><span class="n">frame_states</span><span class="p">,</span> <span class="n">filenames</span><span class="p">,</span> <span class="n">audio_df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function computes layerwise CKA similarity scores between model frame states</span>
+<span class="sd">    and acoustic MFCC features, over a joint set of audio recordings (filenames).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cka_results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+        <span class="n">N_frame_states</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frame_states</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">filename</span><span class="p">]))</span>
+        <span class="n">audio</span> <span class="o">=</span> <span class="n">audio_df</span><span class="p">[</span><span class="n">audio_df</span><span class="p">[</span><span class="s1">&#39;FILENAME&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">filename</span><span class="p">][</span><span class="s1">&#39;AUDIO&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># truncate MFCC features to the same length as number of frame states</span>
+        <span class="c1"># (TODO: check if this is valid)</span>
+        <span class="n">mfcc_features</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">mfcc</span><span class="p">(</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">audio</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="n">SAMP_FREQ</span><span class="p">,</span> <span class="n">n_mels</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">n_fft</span><span class="o">=</span><span class="mi">320</span><span class="p">,</span> <span class="n">hop_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span><span class="o">//</span><span class="n">N_frame_states</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">[:</span><span class="n">N_frame_states</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">frame_states</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">layer_states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frame_states</span><span class="p">[</span><span class="n">layer</span><span class="p">][</span><span class="n">filename</span><span class="p">])</span>
+            <span class="n">cka_score</span> <span class="o">=</span> <span class="n">cka</span><span class="p">(</span><span class="n">gram_linear</span><span class="p">(</span><span class="n">layer_states</span><span class="p">),</span> <span class="n">gram_linear</span><span class="p">(</span><span class="n">mfcc_features</span><span class="p">))</span>
+            <span class="n">cka_results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;MFCC&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">cka_score</span><span class="p">))</span>
+    <span class="n">cka_results_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cka_results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feature&#39;</span><span class="p">,</span> <span class="s1">&#39;filename&#39;</span><span class="p">,</span> <span class="s1">&#39;model_layer&#39;</span><span class="p">,</span> <span class="s1">&#39;cka_score&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">cka_results_df</span>
+
+<span class="k">def</span> <span class="nf">ema_cka</span><span class="p">(</span><span class="n">frame_states</span><span class="p">,</span> <span class="n">filenames</span><span class="p">,</span> <span class="n">ema_df</span><span class="p">,</span> <span class="n">ema_feature_names</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function computes layerwise CKA similarity scores between model frame states</span>
+<span class="sd">    and articulatory EMA features, over a joint set of audio recordings (filenames).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cka_results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+        <span class="n">N_frame_states</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frame_states</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">filename</span><span class="p">]))</span>
+
+        <span class="c1"># truncate EMA features to the same length as number of frame states</span>
+        <span class="c1"># (TODO: check if this is valid)</span>
+        <span class="n">ema_features</span> <span class="o">=</span> <span class="n">ema_df</span><span class="p">[</span>
+            <span class="n">ema_df</span><span class="p">[</span><span class="s1">&#39;FILENAME&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">filename</span>
+        <span class="p">][</span><span class="n">ema_feature_names</span><span class="p">][:</span><span class="n">N_frame_states</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">frame_states</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">layer_states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frame_states</span><span class="p">[</span><span class="n">layer</span><span class="p">][</span><span class="n">filename</span><span class="p">])</span>
+            <span class="n">cka_score</span> <span class="o">=</span> <span class="n">cka</span><span class="p">(</span><span class="n">gram_linear</span><span class="p">(</span><span class="n">layer_states</span><span class="p">),</span> <span class="n">gram_linear</span><span class="p">(</span><span class="n">ema_features</span><span class="p">))</span>
+            <span class="n">cka_results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;EMA&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">cka_score</span><span class="p">))</span>
+    <span class="n">cka_results_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cka_results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feature&#39;</span><span class="p">,</span> <span class="s1">&#39;filename&#39;</span><span class="p">,</span> <span class="s1">&#39;model_layer&#39;</span><span class="p">,</span> <span class="s1">&#39;cka_score&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">cka_results_df</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mfcc_cka_results</span> <span class="o">=</span> <span class="n">mfcc_cka</span><span class="p">(</span><span class="n">frame_states_p1_test</span><span class="p">,</span> <span class="n">p1_filenames</span><span class="p">,</span> <span class="n">audio_df_p1</span><span class="p">)</span>
+<span class="n">ema_cka_results</span> <span class="o">=</span> <span class="n">ema_cka</span><span class="p">(</span><span class="n">frame_states_p1_test</span><span class="p">,</span> <span class="n">p1_filenames</span><span class="p">,</span> <span class="n">ema_features_p1</span><span class="p">,</span> <span class="n">ema_X_feats</span> <span class="o">+</span> <span class="n">ema_Y_feats</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">mfcc_ax</span><span class="p">,</span> <span class="n">ema_ax</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">frame_states_p1_test</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">mfcc_cka_results</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;model_layer&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;cka_score&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">mfcc_ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">)</span>
+<span class="n">mfcc_ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;MFCC similarity scores&#39;</span><span class="p">)</span>
+<span class="n">mfcc_ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+<span class="n">mfcc_ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">layers</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">layers</span><span class="p">))</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">ema_cka_results</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;model_layer&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;cka_score&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ema_ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C1&#39;</span><span class="p">)</span>
+<span class="n">ema_ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;EMA similarity scores&#39;</span><span class="p">)</span>
+<span class="n">ema_ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+<span class="n">ema_ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">layers</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">layers</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/cd8fd0d0dd631bdcd7996eb368e593365d11f4924120a45b6a7fd94fdbe7f7b6.png" src="../../_images/cd8fd0d0dd631bdcd7996eb368e593365d11f4924120a45b6a7fd94fdbe7f7b6.png" />
+</div>
+</div>
+<p>We see a different pattern for CKA similarity to acoustic MFCC features vs. articulatory EMA features: whereas similarity to acoustic features peaks in early model layers and then decreases, similarity to articulatory features increases slightly across early layers and then remains stable until approximately layer 8. Furthermore, CKA similarity to MFCC features is higher than CKA similarity to EMA features. This makes sense (? maybe) – the input to Wav2Vec2 consists of acoustic information, which provides some cues to articulatory parameters but does not fully (or only) reflect them.</p>
+</section>
+<section id="comparing-gram-matrices-between-model-layers">
+<h2>Comparing Gram matrices between model layers<a class="headerlink" href="#comparing-gram-matrices-between-model-layers" title="Link to this heading">#</a></h2>
+<p>We’ll now visualize the representational similarity matrices, or <em>Gram matrices</em>, which form the basis of CKA analyses. Plotting these matrices allows us to visualize the similarities between different stimuli in the model’s representation space.</p>
+<p>In this case, we’ll simplify the analyses by averaging over frame states within sentences, such that we have 1 feature vector per sentence for each Wav2Vec2 layer.</p>
+<p>Let’s look at similarities between Wav2Vec2 features for the sentence recordings by two participants.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_pp_gram_matrices</span><span class="p">(</span><span class="n">filenames_A</span><span class="p">,</span> <span class="n">layer_states_A</span><span class="p">,</span> <span class="n">filenames_B</span><span class="p">,</span> <span class="n">layer_states_B</span><span class="p">):</span>
+    <span class="n">filewise_layer_states_A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">layer_states_A</span><span class="p">[</span><span class="n">fn</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">filenames_A</span><span class="p">])</span>
+    <span class="n">filewise_layer_states_B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">layer_states_B</span><span class="p">[</span><span class="n">fn</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">filenames_B</span><span class="p">])</span>
+    <span class="n">combined_layer_states</span> <span class="o">=</span> <span class="n">zscore</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">filewise_layer_states_A</span><span class="p">,</span> <span class="n">filewise_layer_states_B</span><span class="p">]))</span>
+    <span class="n">pp_sent_ids</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">filenames_A</span> <span class="o">+</span> <span class="n">filenames_B</span><span class="p">]</span>
+    <span class="n">gram_mat</span> <span class="o">=</span> <span class="n">gram_linear</span><span class="p">(</span><span class="n">combined_layer_states</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">gram_mat</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">(),</span> <span class="n">pp_sent_ids</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">(),</span> <span class="n">pp_sent_ids</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>By changing the <code class="docutils literal notranslate"><span class="pre">layer</span></code> variable in the cell below, you can explore the similarities between recordings for different layers of Wav2Vec2. In early layers (e.g. layers 0-4), we see two large blocks reflecting higher similarity for recordings by the same participant. In later layers (e.g. 5-8), we see similarities appear between recordings of the same sentence, made by different participants. This indicates that early Wav2Vec2 layers focus more on voice features, whereas later layers better capture linguistic content.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">layer</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">plot_pp_gram_matrices</span><span class="p">(</span><span class="n">p1_filenames</span><span class="p">,</span> <span class="n">frame_states_p1_test</span><span class="p">[</span><span class="n">layer</span><span class="p">],</span> <span class="n">p2_filenames</span><span class="p">,</span> <span class="n">frame_states_p2_test</span><span class="p">[</span><span class="n">layer</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/9f86fe40adc9d595a2516508fcbe40f72385768b9cec7b408a6b2f74d1b058e3.png" src="../../_images/9f86fe40adc9d595a2516508fcbe40f72385768b9cec7b408a6b2f74d1b058e3.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">layer</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">plot_pp_gram_matrices</span><span class="p">(</span><span class="n">p1_filenames</span><span class="p">,</span> <span class="n">frame_states_p1_test</span><span class="p">[</span><span class="n">layer</span><span class="p">],</span> <span class="n">p2_filenames</span><span class="p">,</span> <span class="n">frame_states_p2_test</span><span class="p">[</span><span class="n">layer</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/e3073d606b50aca402b75001e0960d352210cc10cea4ffd16d088442c2e122bc.png" src="../../_images/e3073d606b50aca402b75001e0960d352210cc10cea4ffd16d088442c2e122bc.png" />
+</div>
+</div>
+</section>
+<section id="cka-similarities-between-model-layers">
+<h2>CKA similarities between model layers<a class="headerlink" href="#cka-similarities-between-model-layers" title="Link to this heading">#</a></h2>
+<p>Representational similarity analyses can also be applied to examine similarities between different layers of the same model, or even different models.</p>
+<p>Here we’ll visualize similarities between different layers of Wav2Vec2.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">model_cka</span><span class="p">(</span><span class="n">filenames_A</span><span class="p">,</span> <span class="n">frame_states_A</span><span class="p">,</span> <span class="n">filenames_B</span><span class="p">,</span> <span class="n">frame_states_B</span><span class="p">):</span>
+    <span class="n">layers_A</span> <span class="o">=</span> <span class="n">frame_states_A</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">layers_B</span> <span class="o">=</span> <span class="n">frame_states_B</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">cka_similarities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">layers_A</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">layers_B</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">layer_A</span> <span class="ow">in</span> <span class="n">frame_states_A</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">layer_B</span> <span class="ow">in</span> <span class="n">frame_states_B</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">layer_states_A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frame_states_A</span><span class="p">[</span><span class="n">layer_A</span><span class="p">][</span><span class="n">fn</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">filenames_A</span><span class="p">])</span>
+            <span class="n">layer_states_B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frame_states_B</span><span class="p">[</span><span class="n">layer_B</span><span class="p">][</span><span class="n">fn</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">filenames_B</span><span class="p">])</span>
+            <span class="n">cka_similarities</span><span class="p">[</span><span class="n">layer_A</span><span class="p">,</span> <span class="n">layer_B</span><span class="p">]</span> <span class="o">=</span> <span class="n">cka</span><span class="p">(</span><span class="n">gram_linear</span><span class="p">(</span><span class="n">layer_states_A</span><span class="p">),</span> <span class="n">gram_linear</span><span class="p">(</span><span class="n">layer_states_B</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">cka_similarities</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For the same recordings, we see several blocks appear where similarities between layers are more similar.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_layerwise_cka</span> <span class="o">=</span> <span class="n">model_cka</span><span class="p">(</span><span class="n">p1_filenames</span><span class="p">,</span> <span class="n">frame_states_p1_test</span><span class="p">,</span>
+                                <span class="n">p1_filenames</span><span class="p">,</span> <span class="n">frame_states_p1_test</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">model_layerwise_cka</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;model_layer&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;model_layer&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/c849df379da659d239c1e69d5e158e8be15de8a4486413076dfe97e161f7a587.png" src="../../_images/c849df379da659d239c1e69d5e158e8be15de8a4486413076dfe97e161f7a587.png" />
+</div>
+</div>
+<p>Comparing recordings of the same sentences by two participants, we can confirm what we saw before: similarities for the same sentences across participants are highest in model layers 5-8.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_layerwise_cka</span> <span class="o">=</span> <span class="n">model_cka</span><span class="p">(</span><span class="n">p1_filenames</span><span class="p">,</span> <span class="n">frame_states_p1_test</span><span class="p">,</span>
+                                <span class="n">p2_filenames</span><span class="p">,</span> <span class="n">frame_states_p2_test</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">model_layerwise_cka</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;model_layer (pp M02)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;model_layer (pp F02)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/1b612da80e1c42cdff388b4f95d428be19a31d101a75446d4cf7bee71393bfe7.png" src="../../_images/1b612da80e1c42cdff388b4f95d428be19a31d101a75446d4cf7bee71393bfe7.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./interspeech2025/representational-analyses"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="probing.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Probing exercise: Does Wav2Vec2 encode vocal tract movements?</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../feature-importance-scoring/context_mixing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Quantifying Context-Mixing in Speech Transformers</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cka-similarity-to-acoustic-and-articulatory-features">CKA similarity to acoustic and articulatory features</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-gram-matrices-between-model-layers">Comparing Gram matrices between model layers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cka-similarities-between-model-layers">CKA similarities between model layers</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png"></a>
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
