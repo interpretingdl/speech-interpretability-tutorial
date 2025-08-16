@@ -31,12 +31,13 @@
 }
 
 @inproceedings{deheerklootsWhatSelfsupervisedSpeech2025,
-	title = {What do self-supervised speech models know about {Dutch}? {Analyzing} advantages of language-specific pre-training},
-	shorttitle = {What do self-supervised speech models know about {Dutch}?},
-	doi = {10.48550/arXiv.2506.00981},
-	author = {{de Heer Kloots}, Marianne and Mohebbi, Hosein and Pouw, Charlotte and Shen, Gaofei and Zuidema, Willem and Bentum, Martijn},
-	year = {2025},
-	booktitle = {Interspeech 2025}
+  title     = {{What do self-supervised speech models know about Dutch?  Analyzing advantages of language-specific pre-training}},
+  author    = {{Marianne {de Heer Kloots} and Hosein Mohebbi and Charlotte Pouw and Gaofei Shen and Willem Zuidema and Martijn Bentum}},
+  year      = {{2025}},
+  booktitle = {{Interspeech 2025}},
+  pages     = {{256--260}},
+  doi       = {10.48550/arXiv.2506.00981},
+  issn      = {{2958-1796}},
 }
 
 @inproceedings{cormacenglishDomainInformedProbingWav2vec2022,
@@ -313,6 +314,8 @@
 @article{shimUNDERSTANDINGROLESELF2022,
   title = {Understanding the Role of Self-Attention for Speech Understanding},
   abstract = {Self-attention (SA) is a critical component of Transformer neural networks that have succeeded in automatic speech recognition (ASR). In this paper, we analyze the role of SA in Transformer-based ASR models for not only understanding the mechanism of improved recognition accuracy but also lowering the computational complexity. We reveal that SA performs two distinct roles: phonetic and linguistic localization. Especially, we show by experiments that phonetic localization in the lower layers extracts phonologically meaningful features from speech and reduces the phonetic variance in the utterance for proper linguistic localization in the upper layers. From this understanding, we discover that attention maps can be reused as long as their localization capability is preserved. To evaluate this idea, we implement the layer-wise attention map reuse on real GPU platforms and achieve up to 1.96 times speedup in inference and 33\% savings in training time with noticeably improved ASR performance for the challenging benchmark on LibriSpeech dev/test-other dataset.},
+  booktitle = {International Conference on Learning Representations},
+  url = {https://openreview.net/forum?id=AvcfxqRy4Y},
   language = {en},
   author = {Shim, Kyuhong and Choi, Jungwook and Sung, Wonyong},
   year = {2022},
@@ -348,9 +351,37 @@
   shorttitle = {Attention is {Not} {Only} a {Weight}},
   url = {https://aclanthology.org/2020.emnlp-main.574/},
   doi = {10.18653/v1/2020.emnlp-main.574},
+  booktitle = "Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)",
   publisher = {Association for Computational Linguistics},
   author = {Kobayashi, Goro and Kuribayashi, Tatsuki and Yokoi, Sho and Inui, Kentaro},
   editor = {Webber, Bonnie and Cohn, Trevor and He, Yulan and Liu, Yang},
   year = {2020},
   pages = {7057--7075}
+}
+
+
+@inproceedings{choEvidenceVocalTract2023,
+  title = {Evidence of {Vocal} {Tract} {Articulation} in {Self}-{Supervised} {Learning} of {Speech}},
+  url = {https://ieeexplore.ieee.org/abstract/document/10094711},
+  doi = {10.1109/ICASSP49357.2023.10094711},
+  abstract = {Recent self-supervised learning (SSL) models have proven to learn rich representations of speech, which can readily be utilized by diverse downstream tasks. To understand such utilities, various analyses have been done for speech SSL models to reveal which and how information is encoded in the learned representations. Although the scope of previous analyses is extensive in acoustic, phonetic, and semantic perspectives, the physical grounding by speech production has not yet received full attention. To bridge this gap, we conduct a comprehensive analysis to link speech representations to articulatory trajectories measured by electromagnetic articulography (EMA). Our analysis is based on a linear probing approach where we measure articulatory score as an average correlation of linear mapping to EMA. We analyze a set of SSL models selected from the leaderboard of the SUPERB benchmark [1] and perform further layer-wise analyses on two most successful models, Wav2Vec 2.0 [2] and HuBERT [3]. Surprisingly, representations from the recent speech SSL models are highly correlated with EMA traces (best: r =0.81), and only 5 minutes are sufficient to train a linear model with high performance (r =0.77). Our findings suggest that SSL models learn to align closely with continuous articulations, and provide a novel insight into speech SSL.},
+  urldate = {2025-08-15},
+  booktitle = {{ICASSP} 2023 - 2023 {IEEE} {International} {Conference} on {Acoustics}, {Speech} and {Signal} {Processing} ({ICASSP})},
+  author = {Cho, Cheol Jun and Wu, Peter and Mohamed, Abdelrahman and Anumanchipalli, Gopala K.},
+  month = jun,
+  year = {2023},
+  note = {ISSN: 2379-190X},
+  keywords = {Acoustic measurements, Acoustic-to-articulatory inversion, Analytical models, Electromagnetic articulography (EMA), Grounding, Probing analysis, Production, Self-supervised learning, Semantics, Signal processing, Speech, Speech representation},
+  pages = {1--5},
+  file = {Snapshot:/Users/mdhk/Zotero/storage/8VQ9KF8E/10094711.html:text/html;Submitted Version:/Users/mdhk/Zotero/storage/SWHL7XJP/Cho et al. - 2023 - Evidence of Vocal Tract Articulation in Self-Super.pdf:application/pdf},
+}
+
+@inproceedings{bentum25_interspeech,
+  title     = {{Word stress in self-supervised speech models: A cross-linguistic comparison}},
+  author    = {Martijn Bentum and Louis {ten Bosch} and Tomas O. Lentz},
+  year      = {{2025}},
+  booktitle = {{Interspeech 2025}},
+  pages     = {{251--255}},
+  doi       = {10.48550/arXiv.2507.04738},
+  issn      = {{2958-1796}},
 }
